@@ -136,8 +136,13 @@ def process_options(option, state):
         requires_bike_file(state)
         bike_no = input(PROMPT_BIKE_NO_SHORT)
         purchase_date = input(PROMPT_PURCHASE_DATE)
-        bike_data_file = open(bike_file_name(state), 'a')
-        return add_bike(bike_no, purchase_date, bike_data_file, state)
+        state = add_bike(bike_no, purchase_date, state)
+
+        # Write data to bike file
+        write_bike_data(state)
+
+        # Return the new state
+        return state
 
     # Service an existing bike
     elif option == 5:
@@ -158,6 +163,9 @@ def process_options(option, state):
 
                 # Service the bike
                 new_state = service_bike(bike_no, state)
+
+                # Write to file
+                write_bike_data(new_state)
 
                 # Ensure bike requires servicing
                 # This is a small hack that I find
@@ -215,6 +223,18 @@ def input_file_name(message, mode):
     # Return the file object
     return file
 # END FUNCTION
+
+# Writes the state to bike data file
+def write_bike_data(state):
+    # Read the file
+    file = open(bike_file_name(state), 'w')
+    # Get all the bike data and headers
+    data = [BIKE_KEYS, *list_bikes([], state)]
+    # Write line by line
+    for bike in data:
+        file.write(','.join(bike) + '\n')
+# END FUNCTION
+
 
 # Raises an exception if bike file has not been read
 def requires_bike_file(state):

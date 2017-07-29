@@ -167,18 +167,9 @@ def display_table(headers, contents):
 
 # Adds a bicycle by appending it to the
 # state and to the file
-def add_bike(bike_no, purchase_date, bike_data_file, state):
-
+def add_bike(bike_no, purchase_date, state):
     # Create the content in memory
     state = create_custom_bike(bike_no, purchase_date, state)
-
-    # Get the bike data to write to the file
-    new_bike = get_bike(bike_no, state)
-
-    # Write the data to the file
-    bike_data_file.write(','.join(new_bike) + '\n')
-
     # Return the new state
     return state
-
 # END FUNCTION
