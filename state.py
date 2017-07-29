@@ -157,6 +157,11 @@ def create_ride(data, state):
     return set_state(RIDES_KEY, new_rides, state)
 # END FUNCTION
 
+# List all rides.
+def list_rides(state):
+    return state[RIDES_KEY]
+# END FUNCTION
+
 # Get the ride data of a certain bike.
 # Raises BikeNotFoundException if not found
 def list_rides(bike_no, state):

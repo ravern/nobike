@@ -235,6 +235,16 @@ def write_bike_data(state):
         file.write(','.join(bike) + '\n')
 # END FUNCTION
 
+def write_ride_data(state):
+    # Read the file
+    file = open(ride_file_name(state), 'w')
+    # Get all the bike data and headers
+    data = [RIDE_KEYS, *list_rides(state)]
+    # Write line by line
+    for ride in data:
+        file.write(','.join(ride) + '\n')
+# END FUNCTION
+
 
 # Raises an exception if bike file has not been read
 def requires_bike_file(state):
