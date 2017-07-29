@@ -72,7 +72,7 @@ def service_bike(bike_no, state):
     # Loop to find the bike
     new_bike_idx = -1
     new_bike = False
-    for i in range(0, len(new_bikes) - 1):
+    for i in range(0, len(new_bikes)):
         bike = new_bikes[i]
         if bike[bike_no_idx] == bike_no:
             new_bike_idx = i

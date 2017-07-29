@@ -13,7 +13,7 @@ from state import *
 from actions import *
 
 # Set this to True in order to debug state
-DEBUG = False
+DEBUG = True
 # Import the pretty printer for debugging if need be
 if DEBUG:
     import pprint
@@ -220,11 +220,13 @@ def input_file_name(message, mode):
 def requires_bike_file(state):
     if not bike_file_name(state):
         raise BikeFileNotReadException
+# END FUNCTION
 
 # Raises an exception if ride file has not been read
 def requires_ride_file(state):
     if not ride_file_name(state):
         raise RideFileNotReadException
+# END FUNCTION
 
 # Execute the program
 main_loop()

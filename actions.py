@@ -125,15 +125,15 @@ def display_ride_data(bike_no, state):
 def display_table(headers, contents):
 
     # Initialize the accumulator
-    data = ''
+    lines = []
 
     # Write the header content first
-    data += ' '.join(headers) + '\n'
+    lines.append(' '.join(headers))
 
     # Write the dividers
     # map explaination: 'Bike No.' => '--------'
     dividers = list(map(lambda key: '-' * len(key), headers))
-    data += ' '.join(dividers) + '\n'
+    lines.append(' '.join(dividers))
 
     # Write the content
     for content in contents:
@@ -146,12 +146,22 @@ def display_table(headers, contents):
         cells = list(map(lambda raw: f'{raw[1]:<{len(raw[0])}}', content_with_keys))
 
         # Add them to data
-        data += ' '.join(cells) + '\n'
+        lines.append(' '.join(cells))
 
     # END FOR
 
+    # This is a hack. I will fix this if
+    # I have time
+    # Find the longest line
+    header_length = len(lines[0])
+    content_max_length = max(list(map(len, lines[2:])))
+    extra_length = max(content_max_length - header_length, 0)
+
+    # Add all the extra '-'s
+    lines[1] += '-' * extra_length
+
     # Return the accumulator
-    return data
+    return '\n'.join(lines) + '\n'
 
 # END FUNCTION
 
@@ -172,7 +182,3 @@ def add_bike(bike_no, purchase_date, bike_data_file, state):
     return state
 
 # END FUNCTION
-
-# Services a bicycle.
-# Raises ServicingNotDueException if bike is not due
-# for servicing
