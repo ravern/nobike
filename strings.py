@@ -23,6 +23,8 @@ MISC_CANCEL_HELP = "You may enter 'cancel' to end this action."
 MISC_CANCEL = "cancel"
 MISC_NUM_BIKES_READ = "Number of bicycles read: "
 MISC_OPTION_NOT_IMPL = "This option has not been implemented."
+MISC_BICYCLE_SERVICED = "Bicycle serviced."
+MISC_RIDING_BICYCLE = "Riding Bike No. {}..."
 
 # Prompts
 PROMPT_MENU = """\

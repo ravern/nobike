@@ -13,7 +13,7 @@ from state import *
 from actions import *
 
 # Set this to True in order to debug state
-DEBUG = True
+DEBUG = False
 # Import the pretty printer for debugging if need be
 if DEBUG:
     import pprint
@@ -164,15 +164,66 @@ def process_options(option, state):
                 # Service the bike
                 new_state = service_bike(bike_no, state)
 
-                # Write to file
-                write_bike_data(new_state)
-
                 # Ensure bike requires servicing
                 # This is a small hack that I find
                 # is acceptable, given how this app is
                 # structured
                 if not bike_no in display_data:
                     raise ServicingNotDueException
+
+                # Write to file
+                write_bike_data(new_state)
+
+                # Print success message
+                print(MISC_BICYCLE_SERVICED)
+
+                # Break since everything went well
+                state = new_state
+                break
+
+            # Print the errors
+            except BikeNotFoundException:
+                print(ERROR_BIKE_NOT_FOUND_SHORT)
+            except ServicingNotDueException:
+                print(ERROR_SERVICING_NOT_DUE)
+
+        # END WHILE
+
+        # Cleanliness
+        print()
+
+        # Display the data again
+        return display_bike_data_with_reasons(state)
+
+    # Ride a bike
+    elif option == 6:
+
+        requires_bike_file(state)
+
+        # Display the bicycles that require servicing
+        state = display_bike_data_no_servicing(state)
+        display_data = get_display(state)
+        print(display_data)
+
+        # Prompt until valid bike returned
+        while True:
+            try:
+
+                # Prompt for bike no
+                bike_no = input(PROMPT_BIKE_NO_SHORT)
+
+                # Ensure bike does not require servicing
+                # This is a small hack that I find
+                # is acceptable, given how this app is
+                # structured
+                if not bike_no in display_data:
+                    raise ServicingNotDueException
+
+                # Notify riding bike
+                print(MISC_RIDING_BIKE.format(bike_no))
+
+                # Write to file
+                write_bike_data(new_state)
 
                 # Break since everything went well
                 state = new_state

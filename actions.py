@@ -100,15 +100,38 @@ def display_bike_data(state):
 # Displays a list of bicycles that require
 # servicing, and their reaons
 def display_bike_data_with_reasons(state):
+    # Create headers
+    headers = BIKE_KEYS.copy()
+    headers.remove('Purchase Date')
     # Get bikes content
-    bikes = list_bikes([reason_generator], state)
+    bikes = list_bikes_with_fields([reason_generator], headers, state)
     # Filter out the bikes with no reasons
     require_service = lambda bike: bike[len(bike) - 1]
     bikes = list(filter(require_service, bikes))
     # Render the table into a string
-    data = display_table([*BIKE_KEYS, 'Reason/s'], bikes)
+    data = display_table([*headers, 'Reason/s'], bikes)
     # Display the data to the screen
     return display(data, state)
+# END FUNCTION
+
+# Displays a list of biycles that do not
+# require servicing
+def display_bike_data_no_servicing(state):
+    # Create headers
+    headers = BIKE_KEYS.copy()
+    headers.remove('Last Maintenance')
+    headers.remove('Purchase Date')
+    # Get bikes content
+    bikes = list_bikes_with_fields([service_generator], headers, state)
+    print(bikes)
+    # Filter out bikes needing service
+    doesnt_require_service = lambda bike: bike[len(bike) - 1] == 'N'
+    bikes = list(filter(doesnt_require_service, bikes))
+    # Render the table into a string
+    data = display_table(headers, bikes)
+    # Display the data to the screen
+    return display(data, state)
+# END FUNCTION
 
 # Displays the ride data of the selected bike
 def display_ride_data(bike_no, state):
@@ -143,7 +166,8 @@ def display_table(headers, contents):
         content_with_keys = zip(headers, content)
 
         # Map over the rides with their keys and format
-        cells = list(map(lambda raw: f'{raw[1]:<{len(raw[0])}}', content_with_keys))
+        format_string = lambda raw: '{:<{length}}'.format(raw[1], length=len(raw[0]))
+        cells = list(map(format_string, content_with_keys))
 
         # Add them to data
         lines.append(' '.join(cells))

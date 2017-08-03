@@ -124,6 +124,43 @@ def list_bikes(generators, state):
 
 # END FUNCTION
 
+# Get data, excluding certain fields
+def list_bikes_with_fields(generators, fields, state):
+
+    # Get the list of bikes first
+    state_bikes = list_bikes(generators, state)
+
+    # Return value accumulator
+    # Create empty array same size as `state_bikes`
+    bikes = list(map(lambda x: [], state_bikes))
+
+    # Loop through excluded fields
+    for field in fields:
+
+        # Get index of field
+        try: index = BIKE_KEYS.index(field)
+        except ValueError: continue
+
+        # Loop through all the bikes and append value
+        for i in range(0, len(state_bikes)):
+            bikes[i].append(state_bikes[i][index])
+        # END FOR
+
+    # END FOR
+
+    # Append the generator fields at the back
+    for k in range(0, len(generators)):
+        j = len(generators) - k
+        # Loop through all the bikes and append value
+        for i in range(0, len(state_bikes)):
+            bikes[i].append(state_bikes[i][len(state_bikes[i]) - j])
+        # END FOR
+
+    # Return the list of bikes
+    return bikes
+
+# END FUNCTION
+
 # Get a bike by its Bike No.
 # Raises a BikeNotFoundException if the bike is
 # not found
