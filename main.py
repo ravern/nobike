@@ -11,6 +11,8 @@ from strings import *
 from exceptions import *
 from state import *
 from actions import *
+from sensehat_local import *
+from time import sleep
 
 # Set this to True in order to debug state
 DEBUG = False
@@ -212,18 +214,66 @@ def process_options(option, state):
                 # Prompt for bike no
                 bike_no = input(PROMPT_BIKE_NO_SHORT)
 
+                # Ensure bike exists
+                bike = get_bike(bike_no, state)
+
+                # Get battery of bike
+                battery = bike[BIKE_KEYS.index('Batt %')]
+
                 # Ensure bike does not require servicing
                 # This is a small hack that I find
                 # is acceptable, given how this app is
                 # structured
                 if not bike_no in display_data:
-                    raise ServicingNotDueException
+                    raise ServicingDueException
 
                 # Notify riding bike
-                print(MISC_RIDING_BIKE.format(bike_no))
+                print(MISC_RIDING_BICYCLE.format(bike_no))
 
-                # Write to file
-                write_bike_data(new_state)
+                # Get the temperature and orientation
+                orientation = get_pitch_roll_yaw()
+                temperature = get_temperature()
+                temp_to_charge = temperature + 0.5
+
+                # Print the data
+                print_orientation_and_temp(orientation, temperature)
+
+                # Cleanliness
+                print()
+
+                # Accumulator of the ride data
+                ride_data = []
+
+                # Start the loop
+                for i in range(0, 5):
+
+                    # Sleep for 3 seconds
+                    sleep(3)
+
+                    # Check if ride data has a record
+                    if len(ride_data) == 0:
+                        prev_orientation = orientation
+                    else:
+                        prev_orientation = None
+
+                    # Get the temperature and orientation
+                    orientation = get_pitch_roll_yaw()
+                    temperature = get_temperature()
+
+                    # Add the ride data to the accum
+                    ride_data = add_ride_data(
+                        temp_to_charge,
+                        temperature,
+                        orientation,
+                        ride_data,
+                        prev_orientation,
+                        int(battery)
+                    )
+
+                # END FOR
+
+                # Print the ride data
+                print(ride_data)
 
                 # Break since everything went well
                 state = new_state
@@ -232,8 +282,8 @@ def process_options(option, state):
             # Print the errors
             except BikeNotFoundException:
                 print(ERROR_BIKE_NOT_FOUND_SHORT)
-            except ServicingNotDueException:
-                print(ERROR_SERVICING_NOT_DUE)
+            except ServicingDueException:
+                print(ERROR_SERVICING_DUE)
 
         # END WHILE
 
@@ -308,6 +358,11 @@ def requires_ride_file(state):
     if not ride_file_name(state):
         raise RideFileNotReadException
 # END FUNCTION
+
+# Prints the roll, pitch, yaw and temp to the console
+def print_orientation_and_temp(data, temp):
+    # Print the stuff
+    print('Pitch: {}; Roll: {}; Yaw: {}; Temp: {:.1f}'.format(*data, temp))
 
 # Execute the program
 main_loop()

@@ -14,3 +14,4 @@ class CancelledException(Exception): pass
 class BikeNotFoundException(Exception): pass
 class BikeAlreadyExistsException(Exception): pass
 class ServicingNotDueException(Exception): pass
+class ServicingDueException(Exception): pass

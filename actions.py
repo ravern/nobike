@@ -197,3 +197,55 @@ def add_bike(bike_no, purchase_date, state):
     # Return the new state
     return state
 # END FUNCTION
+
+# Appends a new row of ride data to the
+# ride_data passed in. Returns new ride
+# data
+def add_ride_data(temp_to_charge, temperature, orientation, ride_data, prev_orient, prev_batt):
+
+    # Get the previous data
+    if prev_orient is None:
+        last_ride = ride_data[len(ride_data) - 1]
+        prev_orient = last_ride[:3]
+        prev_batt = last_ride[len(last_ride) - 2]
+        prev_km = last_ride[len(last_ride) - 1]
+    else:
+        prev_km = 0
+
+    # Create new vars
+    new_batt = prev_batt
+    new_km = prev_km
+
+    # Validate if movement or not
+    if calc_cum_change(prev_orient, orientation) > 20:
+        movement = True
+    else:
+        movement = False
+
+    # Lose battery if no movement
+    if not movement:
+        new_batt -= 1
+
+    # If conditions fulfilled, add to km and batt
+    if movement and temperature > temp_to_charge:
+        new_batt += 1
+        new_km += 0.01
+
+    # Copy ride data
+    new_ride_data = ride_data.copy()
+
+    # Append the new ride data
+    new_ride_data.append([*orientation, movement, temperature, new_batt, new_km])
+
+    # Return the new ride data
+    return new_ride_data
+
+# END FUNCTION
+
+# Calculate absolute change between 2 lists of 3
+def calc_cum_change(lhs, rhs):
+    # Zip the two lists together
+    zipped = zip(lhs, rhs)
+    # Map over zipped and return the
+    # abs(lhs - rhs)
+    return sum(map(lambda x: abs(x[0] - x[1]), zipped))
