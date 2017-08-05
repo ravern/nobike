@@ -29,7 +29,7 @@ else:
     from sensehat import *
 
 # Set this to True to emulate files
-EMULATE_FILES = True
+EMULATE_FILES = False
 
 # The main loop. Within this is the entire program execution
 def main_loop():
@@ -259,10 +259,10 @@ def process_options(option, state):
                 ride_data = []
 
                 # Start the loop
-                for i in range(0, 5):
+                for i in range(0, 15 // 3):
 
                     # Sleep for 3 seconds
-                    sleep(3)
+                    sleep(0)
 
                     # Check if ride data has a record
                     if len(ride_data) == 0:
@@ -287,7 +287,8 @@ def process_options(option, state):
                 # END FOR
 
                 # Print the ride data
-                print(ride_data)
+                display_data = display_table(HEADERS_RIDE_DATA, ride_data)
+                print(display_data)
 
                 # Break since everything went well
                 state = new_state

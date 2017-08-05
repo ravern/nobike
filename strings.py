@@ -74,3 +74,6 @@ ERROR_BIKE_ALREADY_EXISTS = "The bike you entered already exists."
 ERROR_SERVICING_NOT_DUE = "Bike is not due for servicing."
 ERROR_SERVICING_DUE = "Bike is due for servicing."
 ERROR_BIKE_NOT_FOUND_SHORT = "No such bicycle"
+
+# Headers
+HEADERS_RIDE_DATA = ['Pitch', 'Roll ', 'Yaw  ', 'Movement', 'Temp', 'Batt %', 'KM']

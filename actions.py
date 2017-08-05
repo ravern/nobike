@@ -235,7 +235,7 @@ def add_ride_data(temp_to_charge, temperature, orientation, ride_data, prev_orie
     new_ride_data = ride_data.copy()
 
     # Append the new ride data
-    new_ride_data.append([*orientation, movement, temperature, new_batt, new_km])
+    new_ride_data.append([*orientation, str(movement), temperature, new_batt, new_km])
 
     # Return the new ride data
     return new_ride_data

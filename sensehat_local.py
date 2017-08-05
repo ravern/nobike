@@ -30,9 +30,15 @@ def set_battery_display(batt):
 # END FUNCTION
 
 # Return the pitch, roll, yaw in a list
+prev = 180
 def get_pitch_roll_yaw():
-    return [180, 180, 180]
+    global prev
+    prev += 7
+    return [prev, prev, prev]
 
 # Return the temperature
+prev_t = 30.5
 def get_temperature():
-    return 30.5
+    global prev_t
+    prev_t += 0.5
+    return prev_t
