@@ -11,7 +11,6 @@ from strings import *
 from exceptions import *
 from state import *
 from actions import *
-from sensehat_local import *
 from time import sleep
 
 # Set this to True in order to debug state
@@ -21,6 +20,16 @@ if DEBUG:
     import pprint
     pp = pprint.PrettyPrinter(indent=4)
     pprint = pp.pprint
+
+# Set this to True to use SensehatLocal
+SENSEHAT_LOCAL = True
+if SENSEHAT_LOCAL:
+    from sensehat_local import *
+else:
+    from sensehat import *
+
+# Set this to True to emulate files
+EMULATE_FILES = True
 
 # The main loop. Within this is the entire program execution
 def main_loop():
@@ -115,12 +124,17 @@ def process_options(option, state):
 
     # Read from file
     elif option == 1:
-        # Set the bike_file_name and ride_file_name in the state
-        bike_data_file = input_file_name(PROMPT_BIKE_DATA_FILE, 'r')
-        state = set_bike_file_name(bike_data_file.name, state)
-        ride_data_file = input_file_name(PROMPT_RIDE_DATA_FILE, 'r')
-        state = set_ride_file_name(ride_data_file.name, state)
-        return read_data(bike_data_file, ride_data_file, state)
+        # Emulate files by hardcoding a dict
+        if EMULATE_FILES:
+            # Hardcoded state
+            return {   'BIKES': [   ['T101', '10/04/2016', '55', '10/01/2017', '25.08'], ['T102', '01/07/2016', '10', '15/05/2017', '30.94'], ['T103', '15/11/2016', '94', '13/06/2017', '83.16'], ['T104', '25/04/2017', '58', '10/01/2017', '25.08'], ['T105', '24/05/2017', '5', '20/06/2017', '93.80']], 'BIKE_FILE': 'data/1.csv', 'DISPLAY': False, 'QUIT?': False, 'RIDES': [   ['T101', '74', '0.27', '78'], ['T105', '40', '0.14', '5'], ['T101', '930', '2.70', '63'], ['T101', '30', '0.07', '55']], 'RIDE_FILE': 'data/2.csv'}
+        else:
+            # Set the bike_file_name and ride_file_name in the state
+            bike_data_file = input_file_name(PROMPT_BIKE_DATA_FILE, 'r')
+            state = set_bike_file_name(bike_data_file.name, state)
+            ride_data_file = input_file_name(PROMPT_RIDE_DATA_FILE, 'r')
+            state = set_ride_file_name(ride_data_file.name, state)
+            return read_data(bike_data_file, ride_data_file, state)
 
     # Display bikes data
     elif option == 2:

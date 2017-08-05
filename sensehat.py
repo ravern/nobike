@@ -8,6 +8,10 @@
 # Import Sensehat in order to use it
 from sense_hat import SenseHat
 
+# Need to use ceil to round up the
+# battery percentage
+from math import ceil
+
 # Color constants
 RED = [255, 0, 0]
 GREEN = [0, 255, 0]
@@ -26,16 +30,20 @@ def set_battery_display(batt):
     # Return value accumulator
     pixels = []
     # Find the number of pixels to be set
-    num_pixels = batt // 2
+    num_pixels = ceil(batt / 2)
     # Loop 8x8 times to fill up display
     for i in range(0, DISPLAY_SIZE**2):
         # Check if even or odd or 0, and
         # fill up the colors accordingly.
-        if i < num_pixels:
-            # Even
-            if i % 2 == 0: pixels.append(RED)
-            # Odd
-            else: pixels.append(GREEN)
+        if i < num_pixels - 1:
+            pixels.append(GREEN)
+        elif i == num_pixels - 1:
+            if batt % 2 == 1:
+                # If the battery is odd
+                pixels.append(RED)
+            else:
+                # If the battery is even
+                pixels.append(GREEN)
         else:
             # Zero
             pixels.append(BLACK)
