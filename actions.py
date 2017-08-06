@@ -41,7 +41,7 @@ def read_data(bike_data_file, ride_data_file, state):
     # END FOR
 
     # Display the number of bikes read
-    num_bikes_read_str = MISC_NUM_BIKES_READ + f'{len(bike_data_lines)}'
+    num_bikes_read_str = MISC_NUM_BIKES_READ + str(len(bike_data_lines))
     return display(num_bikes_read_str, new_state)
 
 # END FUNCTION
@@ -87,12 +87,26 @@ def reason_generator(bike):
 
 # END FUNCTION
 
+# Validates a bike number
+def validate_bike_no(bike_no, state):
+    # Check if it looks correct
+    if not bike_no[0] == 'T':
+        raise InvalidBikeNoException
+    # Check if it already exists
+    try:
+        get_bike(bike_no, state)
+        raise BikeAlreadyExistsException
+    except BikeNotFoundException:
+        pass
+# END FUNCTION
+
+
 # Displays the bike data
 def display_bike_data(state):
     # Get bikes content
     bikes = list_bikes([service_generator], state)
     # Render table to a string
-    data = display_table([*BIKE_KEYS, 'Service?'], bikes)
+    data = display_table(BIKE_KEYS + ['Service?'], bikes)
     # Display the data to the screen
     return display(data, state)
 # END FUNCTION
@@ -109,7 +123,7 @@ def display_bike_data_with_reasons(state):
     require_service = lambda bike: bike[len(bike) - 1]
     bikes = list(filter(require_service, bikes))
     # Render the table into a string
-    data = display_table([*headers, 'Reason/s'], bikes)
+    data = display_table(headers + ['Reason/s'], bikes)
     # Display the data to the screen
     return display(data, state)
 # END FUNCTION
@@ -123,7 +137,6 @@ def display_bike_data_no_servicing(state):
     headers.remove('Purchase Date')
     # Get bikes content
     bikes = list_bikes_with_fields([service_generator], headers, state)
-    print(bikes)
     # Filter out bikes needing service
     doesnt_require_service = lambda bike: bike[len(bike) - 1] == 'N'
     bikes = list(filter(doesnt_require_service, bikes))
@@ -235,11 +248,26 @@ def add_ride_data(temp_to_charge, temperature, orientation, ride_data, prev_orie
     new_ride_data = ride_data.copy()
 
     # Append the new ride data
-    new_ride_data.append([*orientation, str(movement), temperature, new_batt, new_km])
+    new_ride_data.append(orientation + [str(movement), temperature, new_batt, new_km])
 
     # Return the new ride data
     return new_ride_data
 
+# END FUNCTION
+
+# Creates a ride record based on some ride data
+def create_ride_record(bike_no, ride_data, state):
+    # Generate ride info
+    ride = [
+        bike_no,
+        str(15),
+        '{:.2f}'.format(float(ride_data[len(ride_data) - 1])),
+        str(ride_data[len(ride_data) - 2])
+    ]
+    # Add it to state
+    new_state = create_ride(ride, state)
+    # Return the new state
+    return new_state
 # END FUNCTION
 
 # Calculate absolute change between 2 lists of 3

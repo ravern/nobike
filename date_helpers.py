@@ -7,6 +7,7 @@
 
 # Import datetime, duh.
 from datetime import *
+from exceptions import *
 
 # Returns todays date as a string
 # formatted like "DD/MM/YY"
@@ -22,6 +23,14 @@ def date_to_string(date):
 # Convert string to date
 def string_to_date(str):
     return datetime.strptime(str, '%d/%m/%Y').date()
+# END FUNCTION
+
+# Validates a date input
+def validate_date(str):
+    try:
+        datetime.strptime(str, '%d/%m/%Y').date()
+    except ValueError:
+        raise InvalidDateException
 # END FUNCTION
 
 # Checks if the two given dates are

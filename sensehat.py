@@ -53,8 +53,8 @@ def set_battery_display(batt):
 
 # Return the pitch, roll, yaw in a list
 def get_pitch_roll_yaw():
-    return s.get_orientation().values()
+    return list(map(lambda x: round(x), s.get_orientation().values()))
 
 # Return the temperature
 def get_temperature():
-    return s.get_temperature()
+    return round(s.get_temperature(), 1)

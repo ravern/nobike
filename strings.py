@@ -25,6 +25,10 @@ MISC_NUM_BIKES_READ = "Number of bicycles read: "
 MISC_OPTION_NOT_IMPL = "This option has not been implemented."
 MISC_BICYCLE_SERVICED = "Bicycle serviced."
 MISC_RIDING_BICYCLE = "Riding Bike No. {}..."
+MISC_TRIP_ENDED = "Trip ended."
+MISC_TRAVEL_DETAILS = "You travelled {:.2f}km over 15 seconds."
+MISC_THANKS = "Thank you for riding with oRide!"
+MISC_BIKE_ADD_SUCCESS = "Successfully added bike."
 
 # Prompts
 PROMPT_MENU = """\
@@ -74,6 +78,9 @@ ERROR_BIKE_ALREADY_EXISTS = "The bike you entered already exists."
 ERROR_SERVICING_NOT_DUE = "Bike is not due for servicing."
 ERROR_SERVICING_DUE = "Bike is due for servicing."
 ERROR_BIKE_NOT_FOUND_SHORT = "No such bicycle"
+ERROR_INVALID_DATE = "Invalid date given."
+ERROR_INVALID_BIKE_NO = "Bike nos. must start with a 'T'"
+ERROR_FILE_HAS_BEEN_READ = "Files have already been read. Please restart if you want to use different files."
 
 # Headers
 HEADERS_RIDE_DATA = ['Pitch', 'Roll ', 'Yaw  ', 'Movement', 'Temp', 'Batt %', 'KM']

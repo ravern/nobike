@@ -5,6 +5,8 @@
 # Created At: 20 July 2017
 #
 
+from math import ceil
+
 # Color constants
 RED = '#'
 GREEN = '@'
@@ -15,18 +17,26 @@ DISPLAY_SIZE = 8
 
 # Sets the battery display on the Sensehat
 def set_battery_display(batt):
-    num_batt = batt // 2
-    for y in range(0, DISPLAY_SIZE):
-        for x in range(0, DISPLAY_SIZE):
-            idx = x + y * DISPLAY_SIZE
-            if idx > num_batt:
-                if idx % 2 == 0:
-                    print(RED, end='')
-                else:
-                    print(GREEN, end='')
+    # Find the number of pixels to be set
+    num_pixels = ceil(batt / 2)
+    # Loop 8x8 times to fill up display
+    for i in range(0, DISPLAY_SIZE**2):
+        if i % DISPLAY_SIZE == 0:
+            print()
+        # Check if even or odd or 0, and
+        # fill up the colors accordingly.
+        if i < num_pixels - 1:
+            print(GREEN, end='')
+        elif i == num_pixels - 1:
+            if batt % 2 == 1:
+                # If the battery is odd
+                print(RED, end='')
             else:
-                print(BLACK, end='')
-        print()
+                # If the battery is even
+                print(GREEN, end='')
+        else:
+            # Zero
+            print(BLACK, end='')
 # END FUNCTION
 
 # Return the pitch, roll, yaw in a list

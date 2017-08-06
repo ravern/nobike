@@ -59,6 +59,38 @@ def create_custom_bike(bike_no, purchase_date, state):
 
 # END FUNCTION
 
+# Updates an existing bike
+# Rasies BikeNotFoundException if not found
+def update_bike(bike_no, battery, km_since_last_inc, state):
+
+    # Get the index of the bike no. key
+    bike_no_idx = BIKE_KEYS.index('Bike No.')
+
+    # Copy the bikes
+    new_bikes = state[BIKES_KEY].copy()
+
+    # Loop to find the bike
+    new_bike_idx = -1
+    new_bike = False
+    for i in range(0, len(new_bikes)):
+        bike = new_bikes[i]
+        if bike[bike_no_idx] == bike_no:
+            new_bike_idx = i
+            new_bike = bike.copy()
+
+    # Raise exception if bike hasn't been found
+    if not new_bike: raise BikeNotFoundException
+
+    # Otherwise set the new bike's data and set it
+    # in the array
+    new_bike = [new_bike[0], new_bike[1], str(battery), new_bike[3], '{:.2f}'.format(float(new_bike[4]) + km_since_last_inc)]
+    new_bikes[new_bike_idx] = new_bike
+
+    # Set the value in the state
+    return set_state(BIKES_KEY, new_bikes, state)
+
+# END FUNCTION
+
 # Services an existing bike
 # Raises BikeNotFoundException if not found
 def service_bike(bike_no, state):
@@ -195,7 +227,7 @@ def create_ride(data, state):
 # END FUNCTION
 
 # List all rides.
-def list_rides(state):
+def list_all_rides(state):
     return state[RIDES_KEY]
 # END FUNCTION
 
